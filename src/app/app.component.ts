@@ -10,28 +10,49 @@ export class AppComponent implements OnInit {
   title = 'liff-app';
   ngOnInit() {
     new Promise<LIFFUserProfile>(resolve => {
-      liff.init(data => {
-        // https://developers.line.biz/en/reference/liff/#initialize-liff-app
-        // data.language == "zh-TW"
-        // data.context.type = utou | room | group | none
-        // data.context.utouId
-        // data.context.roomId
-        // data.context.groupId
-        // data.context.userId
-        // data.context.viewType = compact | tall | full
-        resolve(liff.getProfile());
-      }, err => {
-        // LIFF initialization failed
-        // err.code;
-      });
-    })
-      .then((profile) => {
-        this.profile = profile;
-        // profile.userId
-        // profile.displayName
-        // profile.pictureUrl
-        // profile.statusMessage
+      liff.init(
+        data => {
+          // https://developers.line.biz/en/reference/liff/#initialize-liff-app
+          // data.language == "zh-TW"
+          // data.context.type = utou | room | group | none
+          // data.context.utouId
+          // data.context.roomId
+          // data.context.groupId
+          // data.context.userId
+          // data.context.viewType = compact | tall | full
+          resolve(liff.getProfile());
+        },
+        err => {
+          // LIFF initialization failed
+          // err.code;
+        }
+      );
+    }).then(profile => {
+      this.profile = profile;
+      // profile.userId
+      // profile.displayName
+      // profile.pictureUrl
+      // profile.statusMessage
+    });
+  }
 
-      });
+  sendMsg() {
+    liff.sendMessages([
+      {
+        type: 'text',
+        text: 'hello'
+      }
+    ]);
+  }
+
+  open() {
+    liff.openWindow({
+      url: 'https://google.com',
+      external: true
+    });
+  }
+
+  close() {
+    liff.closeWindow();
   }
 }
